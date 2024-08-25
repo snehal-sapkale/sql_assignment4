@@ -1,0 +1,125 @@
+1) Create a database named college, Create a table name student in college database with following structure, roll,name,class,marks,age with respective datatypes
+
+mysql> CREATE DATABASE college;
+mysql> use college;
+mysql> create table student (roll int primary key, name varchar(20), class varchar(4), marks float, age int);
+
+1.1) Insert at least 5 rows in the table.
+mysql> insert into student (roll, name, class, marks, age) values (1, 'Snehal', 'SE', 65.45, 20);
+mysql> insert into student (roll, name, class, marks, age) values (2, 'Rachana', 'TE', 69.45, 21);
+mysql> insert into student (roll, name, class, marks, age) values (3, 'Gouri', 'FE', 78.45, 19);
+mysql> insert into student (roll, name, class, marks, age) values (4, 'Milind', 'SE', 80.45, 20);
+mysql> insert into student (roll, name, class, marks, age) values (5, 'Sneha', 'BE', 79.45, 22);
+
+1.2) Delete the entry of roll number 4
+mysql> delete from student where roll = 4;
+
+1.3) Update the marks of roll number 3
+mysql> update student set marks = 75.45 where roll = 3;
+
+1.4) Give additional grace marks of 0.5 to all students
+ update student set marks = marks + 0.5;
+
+1.5) Truncate the table
+mysql> truncate table student;
+
+1.6) Insert the data again using multi-insert statement.
+mysql> insert into student (roll, name, class, marks, age) values
+    -> (1, 'Snehal', 'SE', 65.45, 20),
+    -> (2, 'Rachana', 'TE', 69.45, 21),
+    -> (3, 'Gouri', 'FE', 78.45, 19),
+    -> (4, 'Milind', 'SE', 80.45, 20),
+    -> (5, 'Sneha', 'BE', 79.45, 22);
+
+2)Apply the following MySQL clause to this table
+
+2.1) Creating, Altering, Dropping Constraints
+create: mysql> create table se_student as select * from student where class = 'SE';
+alter:mysql> alter table se_student
+    -> ADD CONSTRAINT pk_roll PRIMARY KEY (roll);
+drop: mysql> alter table se_student drop PRIMARY KEY;
+
+2.2) Aggregate Functions: SUM(), AVG(), COUNT(), MAX(), MIN(), COUNT(), Group By, Having Clause
+count: mysql> select count(class)
+    -> from student
+    -> where class = 'SE';
+sum: mysql> select format(sum(marks),2)
+    -> from student
+    -> where class = 'SE';
+avg: mysql> select format(avg(marks),2)
+    -> from student
+    -> where class = 'SE';
+max: mysql> select class, max(marks)
+    -> from student
+    -> group by class;
+min: mysql> select class, min(marks)
+    -> from student
+    -> group by class;
+having: mysql> select format(avg(marks),2) as avg_marks, class
+    -> from student
+    -> group by class
+    -> having format(avg(marks),2) > 60;
+
+2.3) Using Like, Distinct, Order By, Between...And
+like: mysql> select name, marks
+    -> from student
+    -> where name like 's%';
+distinct: mysql> select distinct class from student;
+order by: mysql> select name, marks
+    -> from student
+    -> order by marks desc;
+between: mysql> select name, marks
+    -> from student
+    -> where marks between 70 and 80;
+
+2.4) Comparing Nulls, Using IN/Not-In
+in: mysql> select * from student
+    -> where class in ('FE', 'SE');
+not in: mysql> select * from student
+    -> where class not in ('FE', 'SE');
+is null: mysql> select roll
+    -> from student
+    -> where name is null;
+is not null: mysql> select roll
+    -> from student
+    -> where name is not null;
+
+3)
+Q1) Retrieve the First_name and Last_name of all employees
+mysql> select First_name, Last_name from employee;
+
+Q2) Find the total number of employees in the IT department
+mysql> select count(Employee_id) as total_emp from employee where Department = 'IT';
+
+Q3) List the details of employees who joined after 2019-02-01.
+mysql> select * from employee where Joining_date > '2019-02-01';
+
+Q4) What is the average salary of employees in the Finance department?
+mysql> select format(avg(Salary),2) as avg_salary from employee where Department = 'Finance';
+
+Q5) Find the maximum salary in the Banking department
+mysql> select max(Salary) as max_salary from employee where Department = 'Banking';
+
+Q6) Calculate the total salary paid to employees in each department
+mysql> select Department, sum(Salary) as total_salary from employee group by Department;
+
+Q7) Retrieve the employee(s) with the highest salary.
+mysql> select First_name, Last_name, Salary from employee order by Salary desc limit 5;
+
+Q8) List all employees with a salary greater than 3000000, ordered by Joining_date.
+mysql> select First_name, Last_name, Salary, Joining_date from employee where Salary > 3000000 order by Joining_date asc;
+
+Q9) Retrieve the details of employees whose Last_name starts with 'K'.
+mysql> select * from employee where Last_name like 'k%';
+
+Q14) Find the second highest salary in the company
+mysql> select max(Salary) as secondighestSalary from employee where Salary < (select max(Salary) from employee);
+
+Q15) List employees who earn more than the average salary of the entire company.
+mysql> select First_name, Last_name, Salary from employee where Salary > (select avg(Salary) from employee);
+
+Q16) Update the salary of employees in the Insurance department by a 10% increase.
+mysql> update employee set Salary = Salary +  (Salary * 10/100) where Department = 'Insurance';
+
+Q17) Delete records of employees who joined before 2019-02-01.
+mysql> delete from employee where Joining_date < '2019-02-01';
